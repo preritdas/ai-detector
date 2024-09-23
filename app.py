@@ -40,13 +40,17 @@ if st.button("Check for AI Content"):
             col1, col2, col3 = st.columns(3)
             
             with col1:
-                st.metric("Average AI Probability", f"{doc['average_generated_prob']:.2%}")
+                ai_prob = doc['class_probabilities']['ai']
+                st.metric("AI Probability", f"{ai_prob:.2%}")
             
             with col2:
                 st.metric("Predicted Class", doc['predicted_class'].capitalize())
             
             with col3:
                 st.metric("Confidence", doc['confidence_category'].capitalize())
+            
+            st.subheader("Class Probabilities")
+            st.json(doc['class_probabilities'])
             
             st.subheader("Detailed Results")
             st.json(doc)
