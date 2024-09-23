@@ -6,20 +6,20 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Get API key from environment variable
-API_KEY = os.getenv("GPTZERO_API_KEY")
+# Get API key and endpoint URL from environment variables
+BACKEND_API_KEY = os.getenv("BACKEND_API_KEY")
+BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT")
 
-def check_ai_content(text):
-    url = "https://api.gptzero.me/v2/predict/text"
+def analyze_text(text):
     headers = {
         "Content-Type": "application/json",
-        "x-api-key": API_KEY
+        "x-api-key": BACKEND_API_KEY
     }
     data = {
         "document": text
     }
     
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.post(BACKEND_ENDPOINT, headers=headers, json=data)
     return response.json()
 
 st.set_page_config(page_title="Prerit's AI Detector", page_icon="🤖", layout="wide")
@@ -29,10 +29,10 @@ st.write("Paste your text below to check for the probability of AI-generated con
 
 user_input = st.text_area("Enter your text here:", height=200)
 
-if st.button("Check for AI Content"):
+if st.button("Analyze Text"):
     if user_input:
         with st.spinner("Analyzing..."):
-            result = check_ai_content(user_input)
+            result = analyze_text(user_input)
         
         if "documents" in result and len(result["documents"]) > 0:
             doc = result["documents"][0]
@@ -68,5 +68,5 @@ How it works:
 4. Probability Calculation: Based on the analysis, it calculates the probability of the text being AI-generated and provides a confidence level for its prediction.
 
 Important Note:
-This detector has a tendency to produce false negatives. Effective prompt engineering can sometimes evade detection, resulting in AI-generated text being classified as human-written. However, it rarely produces false positives. This is because certain characteristics of default AI behavior are almost never seen in human-written content. As a result, when the detector identifies text as AI-generated, it's usually highly accurate.
+This detector has a tendency to produce false negatives. Sophisticated AI-generated text can sometimes evade detection, resulting in it being classified as human-written. However, it rarely produces false positives. This is because certain characteristics of typical AI-generated text are almost never seen in human-written content. As a result, when the detector identifies text as AI-generated, it's usually highly accurate.
 """)
