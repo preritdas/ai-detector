@@ -92,18 +92,35 @@ def display_detailed_results(result):
 
         # Display additional statistics
         st.subheader("Additional Statistics")
-        stats_data = {
-            "Metric": ["Overall Burstiness", "Average Generated Probability", "Document Classification", "Language", "Detector Version"],
-            "Value": [
-                f"{result['overall_burstiness']:.2f}",
-                f"{result['average_generated_prob']:.2%}",
-                result['document_classification'],
-                result['language'],
-                result['version']
-            ]
-        }
-        stats_df = pd.DataFrame(stats_data)
-        st.table(stats_df)
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.metric("Overall Burstiness", f"{result['overall_burstiness']:.2f}")
+        
+        with col2:
+            st.metric("Average Generated Probability", f"{result['average_generated_prob']:.2%}")
+        
+        st.markdown("---")
+        
+        col3, col4, col5 = st.columns(3)
+        
+        with col3:
+            st.markdown("**Document Classification**")
+            classification = result['document_classification']
+            if classification == "AI_ONLY":
+                st.markdown("🤖 AI Only")
+            elif classification == "HUMAN_ONLY":
+                st.markdown("👤 Human Only")
+            else:
+                st.markdown("🤖👤 Mixed")
+        
+        with col4:
+            st.markdown("**Language**")
+            st.markdown(f"🌐 {result['language']}")
+        
+        with col5:
+            st.markdown("**Detector Version**")
+            st.markdown(f"🔍 {result['version']}")
         
     except Exception as e:
         st.error("Error parsing detailed results. Displaying raw JSON instead.")
