@@ -32,19 +32,55 @@ def display_detailed_results(result):
         if result['result_sub_message']:
             st.info(str(result['result_sub_message']).replace("Our detector is", "I am"))
         
-        # Display class probabilities
-        st.subheader("Class Probabilities")
-        prob_df = pd.DataFrame.from_dict(result['class_probabilities'], orient='index', columns=['Probability'])
-        prob_df.index.name = 'Class'
-        prob_df = prob_df.reset_index()
+        # Create two columns for class probabilities and paragraph analysis
+        col_class, col_para = st.columns(2)
         
-        chart = alt.Chart(prob_df).mark_bar().encode(
-            x='Class',
-            y='Probability',
-            color='Class'
-        ).properties(width=600)
+        with col_class:
+            # Display class probabilities
+            st.subheader("Class Probabilities")
+            prob_df = pd.DataFrame.from_dict(result['class_probabilities'], orient='index', columns=['Probability'])
+            prob_df.index.name = 'Class'
+            prob_df = prob_df.reset_index()
+            
+            chart = alt.Chart(prob_df).mark_bar().encode(
+                x='Class',
+                y='Probability',
+                color='Class'
+            ).properties(width=300, height=300)
+            
+            st.altair_chart(chart, use_container_width=True)
         
-        st.altair_chart(chart, use_container_width=True)
+        with col_para:
+            # Display paragraph-level analysis
+            st.subheader("Paragraph Analysis")
+            paragraphs_df = pd.DataFrame(result['paragraphs'])
+            paragraphs_df['Paragraph'] = range(1, len(paragraphs_df) + 1)
+            paragraphs_df['End Sentence Index'] = paragraphs_df['start_sentence_index'] + paragraphs_df['num_sentences'] - 1
+            paragraphs_df['AI Probability'] = paragraphs_df['completely_generated_prob'].apply(lambda x: f"{x:.2%}")
+            paragraphs_df['AI Prob Value'] = paragraphs_df['completely_generated_prob']
+            paragraphs_df = paragraphs_df.rename(columns={
+                'start_sentence_index': 'Start Sentence',
+                'num_sentences': 'Sentence Count',
+            })
+            paragraphs_df = paragraphs_df[['Paragraph', 'Start Sentence', 'End Sentence Index', 'Sentence Count', 'AI Probability', 'AI Prob Value']]
+            
+            # Create a custom Altair chart for paragraph analysis
+            base = alt.Chart(paragraphs_df).encode(
+                y=alt.Y('Paragraph:O', axis=alt.Axis(title='Paragraph'))
+            )
+
+            bar = base.mark_bar().encode(
+                x=alt.X('AI Prob Value:Q', title='AI Generation Probability'),
+                color=alt.Color('AI Prob Value:Q', scale=alt.Scale(scheme='redblue', domain=[0, 1]), legend=None)
+            )
+
+            text = base.mark_text(align='left', dx=5).encode(
+                x=alt.value(0),
+                text=alt.Text('AI Probability:N')
+            )
+
+            paragraph_chart = (bar + text).properties(width=300, height=30 * len(paragraphs_df))
+            st.altair_chart(paragraph_chart, use_container_width=True)
         
         # Display sentence-level analysis
         st.subheader("Sentence Analysis")
@@ -58,37 +94,6 @@ def display_detailed_results(result):
             'highlight_sentence_for_ai': 'Highlighted for AI'
         })
         st.dataframe(sentences_df, use_container_width=True)
-        
-        # Display paragraph-level analysis
-        st.subheader("Paragraph Analysis")
-        paragraphs_df = pd.DataFrame(result['paragraphs'])
-        paragraphs_df['Paragraph'] = range(1, len(paragraphs_df) + 1)
-        paragraphs_df['End Sentence Index'] = paragraphs_df['start_sentence_index'] + paragraphs_df['num_sentences'] - 1
-        paragraphs_df['AI Probability'] = paragraphs_df['completely_generated_prob'].apply(lambda x: f"{x:.2%}")
-        paragraphs_df['AI Prob Value'] = paragraphs_df['completely_generated_prob']
-        paragraphs_df = paragraphs_df.rename(columns={
-            'start_sentence_index': 'Start Sentence',
-            'num_sentences': 'Sentence Count',
-        })
-        paragraphs_df = paragraphs_df[['Paragraph', 'Start Sentence', 'End Sentence Index', 'Sentence Count', 'AI Probability', 'AI Prob Value']]
-        
-        # Create a custom Altair chart for paragraph analysis
-        base = alt.Chart(paragraphs_df).encode(
-            y=alt.Y('Paragraph:O', axis=alt.Axis(title='Paragraph'))
-        )
-
-        bar = base.mark_bar().encode(
-            x=alt.X('AI Prob Value:Q', title='AI Generation Probability'),
-            color=alt.Color('AI Prob Value:Q', scale=alt.Scale(scheme='redblue', domain=[0, 1]), legend=None)
-        )
-
-        text = base.mark_text(align='left', dx=5).encode(
-            x=alt.value(0),
-            text=alt.Text('AI Probability:N')
-        )
-
-        paragraph_chart = (bar + text).properties(width=600, height=30 * len(paragraphs_df))
-        st.altair_chart(paragraph_chart, use_container_width=True)
 
         # Display additional statistics
         st.subheader("Additional Statistics")
@@ -170,5 +175,5 @@ st.sidebar.info("""
 4. Probability Calculation: Based on the analysis, it calculates the probability of the text being AI-generated and provides a confidence level for its prediction.
 
 Important Note:
-This detector has a tendency to produce false negatives. Sophisticated AI-generated text can sometimes evade detection, resulting in it being classified as human-written. However, it rarely produces false positives. This is because certain characteristics of typical AI-generated text are almost never seen in human-written content. As a result, when the detector identifies text as AI-generated, it's usually highly accurate.
+This detector has a tendency to produce false negatives. Sophisticated AI-generated text can sometimes evade detection, resulting in it being classified as human-written. However, it rarely produces false positives. This is because certain characteristics of typical AI-generated text are almost never seen in human-written content. So when the detector identifies text as AI-generated, it's usually highly accurate.
 """)
