@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get API key and endpoint URL from environment variables
-BACKEND_API_KEY = os.getenv("BACKEND_API_KEY")
-BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT")
+BACKEND_API_KEY = os.getenv("BACKEND_API_KEY") or st.secrets["BACKEND_API_KEY"]
+BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT") or st.secrets["BACKEND_ENDPOINT"]
 
 def analyze_text(text):
     headers = {
