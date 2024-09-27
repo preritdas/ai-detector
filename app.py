@@ -28,9 +28,15 @@ def display_detailed_results(result):
     try:
         st.subheader("Detailed Results")
         
-        st.info(str(result['result_message']).replace("Our detector is", "I am"))
-        if result['result_sub_message']:
-            st.info(str(result['result_sub_message']).replace("Our detector is", "I am"))
+        # Dynamically change color based on predicted class
+        if result['predicted_class'].lower() == 'human':
+            st.success(str(result['result_message']).replace("Our detector is", "I am"))
+            if result['result_sub_message']:
+                st.success(str(result['result_sub_message']).replace("Our detector is", "I am"))
+        else:
+            st.error(str(result['result_message']).replace("Our detector is", "I am"))
+            if result['result_sub_message']:
+                st.error(str(result['result_sub_message']).replace("Our detector is", "I am"))
         
         # Create two columns for class probabilities and paragraph analysis
         col_class, col_para = st.columns(2)
