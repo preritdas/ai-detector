@@ -175,11 +175,31 @@ if st.button("Analyze Text"):
 
 st.sidebar.title("How it works")
 st.sidebar.info("""
-1. Text Analysis: The detector examines various linguistic features of the input text, such as sentence structure, vocabulary usage, and writing style.
-2. Pattern Recognition: It looks for patterns that are commonly associated with AI-generated text, such as unusual word combinations or overly consistent writing styles.
-3. Statistical Models: The detector employs machine learning models trained on large datasets of both human-written and AI-generated text to make its predictions.
-4. Probability Calculation: Based on the analysis, it calculates the probability of the text being AI-generated and provides a confidence level for its prediction.
+1. Text Analysis: Linguistic features of the input text, such as sentence structure, vocabulary usage, and writing style.
+2. Pattern Recognition: Patterns commonly associated with AI-generated text, ex. unusual word combinations or overly consistent writing styles.
+3. Statistical Models: Models trained on large datasets of both human-written and AI-generated text.
+4. Probability Calculation: Likelihood of AI use with a confidence level for the prediction.
 
-Important Note:
-This detector has a tendency to produce false negatives. Sophisticated AI-generated text can sometimes evade detection, resulting in it being classified as human-written. However, it rarely produces false positives. This is because certain characteristics of typical AI-generated text are almost never seen in human-written content. So when the detector identifies text as AI-generated, it's usually highly accurate.
+AI detectors produce false negatives. Detecting evasion is easy with informed prompting. However, false positives are rare, as characteristics of AI-generated text are seldom seen in human-written content. So when the detector confidently identifies AI use, it's usually right.
+""")
+
+st.sidebar.markdown("""
+### Perplexity in AI Detection
+
+Perplexity measures how well a probability model predicts a sample, quantifying the model's "surprise" at the text.
+
+**Formula:**
+
+$$
+P(W) = 2^{-\\frac{1}{N} \\sum_{i=1}^N \\log_2 P(w_i)}
+$$
+
+Where:
+- $W$ is the text (sequence of words)
+- $N$ is the total number of words
+- $P(w_i)$ is the probability of each word
+
+**Interpretation:**
+- **Lower perplexity**: The model finds the text more predictable, potentially indicating AI-generated content.
+- **Higher perplexity**: Often associated with human-written text due to its more diverse and less predictable nature.
 """)
