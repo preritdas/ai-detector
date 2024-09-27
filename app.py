@@ -26,7 +26,6 @@ st.set_page_config(page_title="Prerit's AI Detector", page_icon="🤖", layout="
 
 st.title("Prerit's AI Detector")
 st.write("Paste your text below to check for the probability of AI-generated content.")
-st.write(f"cjskdl2390210{BACKEND_API_KEY}")
 
 user_input = st.text_area("Enter your text here:", height=200)
 
