@@ -28,18 +28,9 @@ def display_detailed_results(result):
     try:
         st.subheader("Detailed Results")
         
-        # Display overall results
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Predicted Class", result['predicted_class'].capitalize())
-        with col2:
-            st.metric("Confidence Category", result['confidence_category'].capitalize())
-        with col3:
-            st.metric("Confidence Score", f"{result['confidence_score']:.2%}")
-
-        st.info(result['result_message'])
+        st.info(str(result['result_message']).replace("Our detector is", "I am"))
         if result['result_sub_message']:
-            st.info(result['result_sub_message'])
+            st.info(str(result['result_sub_message']).replace("Our detector is", "I am"))
         
         # Display class probabilities
         st.subheader("Class Probabilities")
@@ -71,14 +62,34 @@ def display_detailed_results(result):
         # Display paragraph-level analysis
         st.subheader("Paragraph Analysis")
         paragraphs_df = pd.DataFrame(result['paragraphs'])
-        paragraphs_df['completely_generated_prob'] = paragraphs_df['completely_generated_prob'].apply(lambda x: f"{x:.2%}")
+        paragraphs_df['Paragraph'] = range(1, len(paragraphs_df) + 1)
+        paragraphs_df['End Sentence Index'] = paragraphs_df['start_sentence_index'] + paragraphs_df['num_sentences'] - 1
+        paragraphs_df['AI Probability'] = paragraphs_df['completely_generated_prob'].apply(lambda x: f"{x:.2%}")
+        paragraphs_df['AI Prob Value'] = paragraphs_df['completely_generated_prob']
         paragraphs_df = paragraphs_df.rename(columns={
-            'start_sentence_index': 'Start Sentence Index',
-            'num_sentences': 'Number of Sentences',
-            'completely_generated_prob': 'AI Generation Probability'
+            'start_sentence_index': 'Start Sentence',
+            'num_sentences': 'Sentence Count',
         })
-        st.dataframe(paragraphs_df, use_container_width=True)
+        paragraphs_df = paragraphs_df[['Paragraph', 'Start Sentence', 'End Sentence Index', 'Sentence Count', 'AI Probability', 'AI Prob Value']]
         
+        # Create a custom Altair chart for paragraph analysis
+        base = alt.Chart(paragraphs_df).encode(
+            y=alt.Y('Paragraph:O', axis=alt.Axis(title='Paragraph'))
+        )
+
+        bar = base.mark_bar().encode(
+            x=alt.X('AI Prob Value:Q', title='AI Generation Probability'),
+            color=alt.Color('AI Prob Value:Q', scale=alt.Scale(scheme='redblue', domain=[0, 1]), legend=None)
+        )
+
+        text = base.mark_text(align='left', dx=5).encode(
+            x=alt.value(0),
+            text=alt.Text('AI Probability:N')
+        )
+
+        paragraph_chart = (bar + text).properties(width=600, height=30 * len(paragraphs_df))
+        st.altair_chart(paragraph_chart, use_container_width=True)
+
         # Display additional statistics
         st.subheader("Additional Statistics")
         stats_data = {
@@ -113,7 +124,7 @@ if st.button("Analyze Text"):
         if "documents" in result and len(result["documents"]) > 0:
             doc = result["documents"][0]
             
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4 = st.columns(4)
             
             with col1:
                 ai_prob = doc['class_probabilities']['ai']
@@ -125,15 +136,17 @@ if st.button("Analyze Text"):
             with col3:
                 st.metric("Confidence", doc['confidence_category'].capitalize())
             
+            with col4:
+                st.metric("Confidence Score", f"{doc['confidence_score']:.2%}")
+            
             display_detailed_results(doc)
         else:
             st.error("Error in processing the request. Please try again.")
     else:
         st.warning("Please enter some text to analyze.")
 
-st.sidebar.title("About")
+st.sidebar.title("How it works")
 st.sidebar.info("""
-How it works:
 1. Text Analysis: The detector examines various linguistic features of the input text, such as sentence structure, vocabulary usage, and writing style.
 2. Pattern Recognition: It looks for patterns that are commonly associated with AI-generated text, such as unusual word combinations or overly consistent writing styles.
 3. Statistical Models: The detector employs machine learning models trained on large datasets of both human-written and AI-generated text to make its predictions.
