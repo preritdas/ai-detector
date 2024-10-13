@@ -75,11 +75,7 @@ if len(subscriptions.data) < 1:
         }
     )
     st.link_button("Get started", url=checkout_session.url)
-else:
-    st.markdown("HAS")
-
-st.markdown(customer.id)
-st.stop()
+    st.stop()
 
 
 def analyze_text(text):
