@@ -25,6 +25,7 @@ workos_client = WorkOSClient(api_key=AUTHKIT_API_KEY, client_id=AUTHKIT_CLIENT_I
 
 
 # Header
+st.set_page_config(page_title="AI Detection", page_icon="🤖", layout="wide")
 st.title("Accurate AI Detection")
 
 
@@ -176,7 +177,6 @@ def display_detailed_results(result):
         st.error("Error parsing detailed results. Displaying raw JSON instead.")
         st.json(result)
 
-st.set_page_config(page_title="Prerit's AI Detector", page_icon="🤖", layout="wide")
 st.write("Paste your text below to check for the probability of AI-generated content.")
 
 user_input = st.text_area("Enter your text here:", height=200)
