@@ -66,6 +66,8 @@ if len(subscriptions.data) < 1:
     st.markdown("You'll need to get started here.")
     checkout_session = stripe_client.checkout.sessions.create(params={"customer": customer.id})
     st.link_button("Get started", url=checkout_session.url)
+else:
+    st.markdown("HAS")
 
 st.markdown(customer.id)
 st.stop()
