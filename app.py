@@ -56,7 +56,7 @@ if not "email" in st.session_state:
 # Subscription
 customer_res = stripe_client.customers.list(params={'email': st.session_state.email})
 if customer_res:
-    customer = customer_res[0]
+    customer = customer_res.data[0]
 else:  # no customer object yet
     customer = stripe_client.customers.create(params={'email': st.session_state.email})
 
