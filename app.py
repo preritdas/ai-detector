@@ -54,9 +54,9 @@ if not "email" in st.session_state:
 
 
 # Subscription
-customer_res = stripe_client.customers.list(email=email)
+customer_res = stripe_client.customers.list(email=st.session_state.email)
 if not customer_res:
-    customer_res = stripe_client.customers.create(email=email)
+    customer_res = stripe_client.customers.create(email=st.session_state.email)
     st.markdown(customer_res)
 
 st.stop()
