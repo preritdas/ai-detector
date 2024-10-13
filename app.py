@@ -70,8 +70,7 @@ if len(subscriptions.data) < 1:
             "success_url": "https://isitai.streamlit.app",
             "mode": "subscription",
             "line_items": [
-                {"price": "price_1Q9JfSGfvrIL5n7Pa0XJypcI", "quantity": 1},
-                {"price": "price_1Q9JfSGfvrIL5n7PqtMwHfV3", "quantity": 1}
+                {"price": "price_1Q9JfSGfvrIL5n7Pa0XJypcI", "quantity": 1}
             ]
         }
     )
