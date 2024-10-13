@@ -67,7 +67,8 @@ if len(subscriptions.data) < 1:
     checkout_session = stripe_client.checkout.sessions.create(
         params={
             "customer": customer.id,
-            "success_url": "https://isitai.streamlit.app"
+            "success_url": "https://isitai.streamlit.app",
+            "mode": "subscription"
         }
     )
     st.link_button("Get started", url=checkout_session.url)
