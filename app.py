@@ -42,6 +42,7 @@ if "code" in st.query_params:
     else:
         # Proceed with auth
         st.session_state["email"] = auth_res.user.email
+        del st.query_params["code"]
         st.json(st.session_state)
 
 if not "email" in st.session_state:
