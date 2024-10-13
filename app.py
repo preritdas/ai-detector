@@ -37,7 +37,8 @@ if "code" in st.query_params:
     st.json(auth_res)
 
 if not "email" in st.session_state:
-    st.markdown("Please sign in [here](celebrated-map-54.authkit.app).")
+    st.markdown("Please sign in to use this app.")
+    st.link_button("Log in", url="celebrated-map-54.authkit.app")
     st.stop()
 
 
