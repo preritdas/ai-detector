@@ -64,7 +64,12 @@ else:  # no customer object yet
 subscriptions = stripe_client.subscriptions.list(params={"customer": customer.id, "status": "active"})
 if len(subscriptions.data) < 1:
     st.markdown("You'll need to get started here.")
-    checkout_session = stripe_client.checkout.sessions.create(params={"customer": customer.id})
+    checkout_session = stripe_client.checkout.sessions.create(
+        params={
+            "customer": customer.id,
+            "success_url": "https://isitai.streamlit.app"
+        }
+    )
     st.link_button("Get started", url=checkout_session.url)
 else:
     st.markdown("HAS")
