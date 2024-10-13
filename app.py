@@ -68,7 +68,11 @@ if len(subscriptions.data) < 1:
         params={
             "customer": customer.id,
             "success_url": "https://isitai.streamlit.app",
-            "mode": "subscription"
+            "mode": "subscription",
+            "line_items": [
+                {"price": "price_1Q9JfSGfvrIL5n7Pa0XJypcI", "quantity": 1},
+                {"price": "price_1Q9JfSGfvrIL5n7PqtMwHfV3", "quantity": 1}
+            ]
         }
     )
     st.link_button("Get started", url=checkout_session.url)
