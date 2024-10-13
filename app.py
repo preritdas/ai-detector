@@ -18,7 +18,7 @@ AUTHKIT_SECRET_KEY = os.getenv("AUTHKIT_API_KEY") or st.secrets["AUTHKIT_API_KEY
 # Authentication
 if not "email" in st.session_state:
     st.markdown("Please sign in.")
-    st.exit()
+    st.stop()
 
 
 def analyze_text(text):
