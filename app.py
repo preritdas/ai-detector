@@ -53,12 +53,19 @@ if not "email" in st.session_state:
     st.stop()
 
 
-# Subscription
+# Stripe customer
 customer_res = stripe_client.customers.list(params={'email': st.session_state.email})
 if customer_res:
     customer = customer_res.data[0]
 else:  # no customer object yet
     customer = stripe_client.customers.create(params={'email': st.session_state.email})
+
+# Subscription
+subscriptions = stripe_client.subscriptions.list(params={"customer": customer.id, "status": "active"})
+if len(subscriptions.data) < 1:
+    st.markdown("You'll need to get started here.")
+    checkout_session = stripe_client.checkout.sessions.create(params={"customer": customer.id})
+    st.link_button("Get started", url=checkout_session.url)
 
 st.markdown(customer.id)
 st.stop()
