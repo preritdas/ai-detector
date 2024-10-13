@@ -31,10 +31,6 @@ stripe_client = StripeClient(STRIPE_API_KEY)
 
 # Header
 st.set_page_config(page_title="AI Detection", page_icon="🤖", layout="wide")
-st.title("Accurate AI Detection")
-st.warning("Ensure your content flies past AI detectors, ex. Turnitin.")
-st.image("static/result_mockup.png")
-st.success("Got you covered. See a detailed AI detection report, then **automatically remove detectable patterns.**")
 
 
 # Authentication
@@ -50,9 +46,14 @@ if "code" in st.query_params:
     else:
         # Proceed with auth
         st.session_state["email"] = auth_res.user.email
+        st.session_state["first_name"] = auth_res.user.first_name or ""
         del st.query_params["code"]
 
 if not "email" in st.session_state:
+    st.title("Accurate AI Detection")
+    st.warning("Ensure your content flies past AI detectors, ex. Turnitin.")
+    st.image("static/result_mockup.png")
+    st.success("Got you covered. See a detailed AI detection report, then **automatically remove detectable patterns.**")
     st.markdown("Please sign in to use this app.")
     st.link_button("Log in", url="https://celebrated-map-54.authkit.app")
     st.stop()
