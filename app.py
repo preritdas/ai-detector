@@ -85,8 +85,11 @@ if len(subscriptions.data) < 1:
 
 
 # Welcome back
-name_ext: str = f", {st.session_state.first_name}" if st.session_state.first_name else ""
-st.title(f"Welcome back{name_ext}!")
+name_ext = ""
+if "first_name" in st.session_state:
+    name_ext = f", {st.session_state.first_name}"
+
+st.title(f"Welcome back{name_ext}.")
 
 
 def analyze_text(text):
