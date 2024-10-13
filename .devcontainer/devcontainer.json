@@ -16,7 +16,7 @@
 	// "forwardPorts": [],
 
 	// Uncomment the next line to run commands after the container is created.
-	"postCreateCommand": "pip install --no-cache-dir -U jupyter jupyterlab ipywidgets && pip install -r tests/requirements.txt",
+	"postCreateCommand": "pip install --no-cache-dir -U jupyter jupyterlab ipywidgets",
 	"customizations": {
 		"vscode": {
 			"extensions": [
