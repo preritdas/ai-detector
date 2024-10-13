@@ -30,7 +30,6 @@ st.title("Accurate AI Detection")
 
 
 # Authentication
-st.json(st.query_params)
 if "code" in st.query_params:
     try:
         auth_res = workos_client.user_management.authenticate_with_code(
@@ -44,7 +43,6 @@ if "code" in st.query_params:
         # Proceed with auth
         st.session_state["email"] = auth_res.user.email
         del st.query_params["code"]
-        st.json(st.session_state)
 
 if not "email" in st.session_state:
     st.markdown("Please sign in to use this app.")
