@@ -2,4 +2,4 @@ streamlit
 requests
 workos
 python-dotenv
-stripe
+stripe==11.1.0
