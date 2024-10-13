@@ -76,7 +76,7 @@ if len(subscriptions.data) < 1:
             "success_url": URL,
             "mode": "subscription",
             "line_items": [
-                {"price": "price_1Q9JxGJo34oS7vi3uBHLnOXS", "quantity": 1}
+                {"price": "price_1Q9LaAJo34oS7vi3xsFofPZL", "quantity": 1}
             ]
         }
     )
