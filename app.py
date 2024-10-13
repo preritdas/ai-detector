@@ -34,7 +34,8 @@ if "code" in st.query_params:
     auth_res = workos_client.user_management.authenticate_with_code(
         code=st.query_params["code"]
     )
-    st.json(auth_res)
+    st.session_state["email"] = auth_res.user.email
+    st.json(st.session_state)
 
 if not "email" in st.session_state:
     st.markdown("Please sign in to use this app.")
