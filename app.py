@@ -21,7 +21,7 @@ st.title("Accurate AI Detection")
 
 # Authentication
 if not "email" in st.session_state:
-    st.markdown("Please sign in.")
+    st.markdown("Please sign in [here](celebrated-map-54.authkit.app).")
     st.stop()
 
 
