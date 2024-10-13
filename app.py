@@ -69,7 +69,7 @@ if len(subscriptions.data) < 1:
     checkout_session = stripe_client.checkout.sessions.create(
         params={
             "customer": customer.id,
-            "success_url": "https://isitai.streamlit.app",
+            "success_url": URL,
             "mode": "subscription",
             "line_items": [
                 {"price": "price_1Q9JxGJo34oS7vi3uBHLnOXS", "quantity": 1}
