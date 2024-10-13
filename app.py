@@ -11,6 +11,15 @@ load_dotenv()
 # Get API key and endpoint URL from environment variables
 BACKEND_API_KEY = os.getenv("BACKEND_API_KEY") or st.secrets["BACKEND_API_KEY"]
 BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT") or st.secrets["BACKEND_ENDPOINT"]
+AUTHKIT_CLIENT_ID = os.getenv("AUTHKIT_CLIENT_ID") or st.secrets["AUTHKIT_CLIENT_ID"]
+AUTHKIT_SECRET_KEY = os.getenv("AUTHKIT_API_KEY") or st.secrets["AUTHKIT_API_KEY"]
+
+
+# Authentication
+if not "email" in st.session_state:
+    st.markdown("Please sign in.")
+    st.exit()
+
 
 def analyze_text(text):
     headers = {
