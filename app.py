@@ -15,6 +15,10 @@ AUTHKIT_CLIENT_ID = os.getenv("AUTHKIT_CLIENT_ID") or st.secrets["AUTHKIT_CLIENT
 AUTHKIT_SECRET_KEY = os.getenv("AUTHKIT_API_KEY") or st.secrets["AUTHKIT_API_KEY"]
 
 
+# Header
+st.title("Accurate AI Detection")
+
+
 # Authentication
 if not "email" in st.session_state:
     st.markdown("Please sign in.")
@@ -147,8 +151,6 @@ def display_detailed_results(result):
         st.json(result)
 
 st.set_page_config(page_title="Prerit's AI Detector", page_icon="🤖", layout="wide")
-
-st.title("Prerit's AI Detector")
 st.write("Paste your text below to check for the probability of AI-generated content.")
 
 user_input = st.text_area("Enter your text here:", height=200)
