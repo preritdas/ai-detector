@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 
 from workos import WorkOSClient
+from stripe import StripeClient
 
 
 # Load environment variables
@@ -18,10 +19,12 @@ BACKEND_API_KEY = os.getenv("BACKEND_API_KEY") or st.secrets["BACKEND_API_KEY"]
 BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT") or st.secrets["BACKEND_ENDPOINT"]
 AUTHKIT_CLIENT_ID = os.getenv("AUTHKIT_CLIENT_ID") or st.secrets["AUTHKIT_CLIENT_ID"]
 AUTHKIT_API_KEY = os.getenv("AUTHKIT_API_KEY") or st.secrets["AUTHKIT_API_KEY"]
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY") or st.secrets["STRIPE_API_KEY"]
 
 
 # Auth setup
 workos_client = WorkOSClient(api_key=AUTHKIT_API_KEY, client_id=AUTHKIT_CLIENT_ID)
+stripe_client = StripeClient(STRIPE_API_KEY)
 
 
 # Header
@@ -51,7 +54,12 @@ if not "email" in st.session_state:
 
 
 # Subscription
+customer_res = stripe_client.customers.list(email=email)
+if not customer_res:
+    customer_res = stripe_client.customers.create(email=email)
+    st.markdown(customer_res)
 
+st.stop()
 
 
 def analyze_text(text):
