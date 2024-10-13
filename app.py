@@ -51,9 +51,9 @@ if "code" in st.query_params:
 
 if not "email" in st.session_state:
     st.title("Accurate AI Detection")
-    st.warning("Ensure your content flies past AI detectors, ex. Turnitin.")
+    st.warning("Ensure your content flies past AI detectors like Turnitin.")
     st.image("static/result_mockup.png")
-    st.success("Got you covered. See a detailed AI detection report, then **automatically remove detectable patterns.**")
+    st.success("This tool shows you a detailed AI detection report, then **automatically removes detectable patterns.**")
     st.markdown("Please sign in to use this app.")
     st.link_button("Log in", url="https://celebrated-map-54.authkit.app")
     st.stop()
