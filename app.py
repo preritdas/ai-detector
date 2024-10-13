@@ -84,6 +84,11 @@ if len(subscriptions.data) < 1:
     st.stop()
 
 
+# Welcome back
+name_ext: str = f", {st.session_state.first_name}" if st.session_state.first_name else ""
+st.title(f"Welcome back{name_ext}!")
+
+
 def analyze_text(text):
     headers = {
         "Content-Type": "application/json",
