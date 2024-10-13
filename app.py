@@ -20,6 +20,7 @@ BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT") or st.secrets["BACKEND_ENDPOINT
 AUTHKIT_CLIENT_ID = os.getenv("AUTHKIT_CLIENT_ID") or st.secrets["AUTHKIT_CLIENT_ID"]
 AUTHKIT_API_KEY = os.getenv("AUTHKIT_API_KEY") or st.secrets["AUTHKIT_API_KEY"]
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY") or st.secrets["STRIPE_API_KEY"]
+URL = "https://isitai.streamlit.app" if os.getenv("MODE") == "prod" else "http://localhost:8501"
 
 
 # Auth setup
