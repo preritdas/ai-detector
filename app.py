@@ -32,6 +32,9 @@ stripe_client = StripeClient(STRIPE_API_KEY)
 # Header
 st.set_page_config(page_title="AI Detection", page_icon="🤖", layout="wide")
 st.title("Accurate AI Detection")
+st.warning("Ensure your content flies past AI detectors, ex. Turnitin.")
+st.image("static/result_mockup.png")
+st.success("Got you covered. See a detailed AI detection report, then **automatically remove detectable patterns.**")
 
 
 # Authentication
