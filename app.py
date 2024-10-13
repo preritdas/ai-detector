@@ -1,9 +1,14 @@
 import streamlit as st
-import requests
-import os
-from dotenv import load_dotenv
+
 import pandas as pd
 import altair as alt
+import requests
+
+import os
+from dotenv import load_dotenv
+
+from workos import WorkOSClient
+
 
 # Load environment variables
 load_dotenv()
@@ -12,7 +17,11 @@ load_dotenv()
 BACKEND_API_KEY = os.getenv("BACKEND_API_KEY") or st.secrets["BACKEND_API_KEY"]
 BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT") or st.secrets["BACKEND_ENDPOINT"]
 AUTHKIT_CLIENT_ID = os.getenv("AUTHKIT_CLIENT_ID") or st.secrets["AUTHKIT_CLIENT_ID"]
-AUTHKIT_SECRET_KEY = os.getenv("AUTHKIT_API_KEY") or st.secrets["AUTHKIT_API_KEY"]
+AUTHKIT_API_KEY = os.getenv("AUTHKIT_API_KEY") or st.secrets["AUTHKIT_API_KEY"]
+
+
+# Auth setup
+workos_client = WorkOSClient(api_key=AUTHKIT_API_KEY, client_id=AUTHKIT_CLIENT_ID)
 
 
 # Header
@@ -21,6 +30,12 @@ st.title("Accurate AI Detection")
 
 # Authentication
 st.json(st.query_params)
+if "code" in st.query_params:
+    auth_res = workos_client.user_management.authenticate_with_code(
+        code=st.query_params["code"]
+    )
+    st.json(auth_res)
+
 if not "email" in st.session_state:
     st.markdown("Please sign in [here](celebrated-map-54.authkit.app).")
     st.stop()
